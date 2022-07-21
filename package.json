@@ -1,7 +1,7 @@
 {
   "name": "mt-practice",
   "version": "0.1.0",
-  "homepage": "https://rakeshmanektech.github.io/mt-practic/task",
+  "homepage": "https://rakeshmanektech.github.io/mt-practice/",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
