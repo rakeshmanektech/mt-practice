@@ -1,6 +1,5 @@
 import logo from './logo.svg';
 import './App.css';
-//import data from './test-data.json'
 import React from 'react';
 import { useState,Fragment  } from 'react';
 import {nanoid } from 'nanoid';
@@ -8,30 +7,19 @@ import {nanoid } from 'nanoid';
 function App() {
 	const [ editing, setEditing ] = useState(false)
 	const initialFormState = { id: null, username: '', color: '' }
-
-  // const [usercolor , setUsercolor ] = useState([
-  //   {
-  //     "id": '',
-  //     "username": "",
-  //     "color": ""
-  //   }
-  // ]);
-
   const [usercolor , setUsercolor ] = useState([
   ]);
   const [colorCount , setAllcolorlist ] = useState([{
     red:0,
     green:0,
-    yeallow:0
+    yellow:0
   }]);
-
 
   const [addFromData , setfromdata ] = useState({
     id:'',
     username:'',
     color:''
   })
-
 
   const [editusercolorid, Seteditcolorid] = useState(null);
 
@@ -46,38 +34,24 @@ function App() {
 
  const handalsubmitfrom = (event) => {
   event.preventDefault();
-  
+  var formsubmitallow = "yes";
   if (addFromData.username.trim() === "" || addFromData.color.trim() === "") {
-    var error = "";
-
     alert("both fields are required");
-
-  //  return false;
-  }else{
-    var error = "submit";
-
+    formsubmitallow = "no";
+    return false;
   }
 
-
-
-    {usercolor.map((usercolordata, index) => {
-
+  {usercolor.map((usercolordata, index) => {
     if (addFromData.username.trim() === usercolordata.username) {
-      var error = "";
-
+      formsubmitallow = "no";
       alert("Name is already exist");
-
-      //return false;
+      return false;
     }else{
-      var error = "submit";
-
+      formsubmitallow = "yes";
     }
+  })}  
 
-  })}
-  
-
-if(error === "submit"){
-  console.log(error+'==');
+if(formsubmitallow === "yes"){
 
   const newdata = { 
     id:nanoid(),
@@ -87,16 +61,18 @@ if(error === "submit"){
   const newuserdatas = [...usercolor,newdata];
   setUsercolor(newuserdatas);
    countColors(newuserdatas);
-
+ setEditing(false);
+   const clear = { 
+     id:'',
+     username:'',
+     color:'color'
+   }
+ 
+   setfromdata(clear);
   }
-
-
-  //setTimeout(() => {  countColors() }, 1000);
   
  }
  const editmydata = (edituser) => {
-
-
   console.log(edituser);
 
   const editdata = { 
@@ -117,18 +93,14 @@ if(error === "submit"){
  }
 
  const handleeditchange = (event,userdata) => {
-
-
   setEditing(true);
   event.preventDefault();
   console.log(userdata);
-
   const newdata = { 
     id:userdata.id,
     username:userdata.username,
     color:userdata.color
   }
-
   setfromdata(newdata);
 
  }
@@ -136,8 +108,6 @@ if(error === "submit"){
 const clearform = (event) =>{
 
   setEditing(false);
-  //console.log(userdata);
-
   const clear = { 
     id:'',
     username:'',
@@ -145,17 +115,13 @@ const clearform = (event) =>{
   }
 
   setfromdata(clear);
-
-
 }
 
 
 const countColors = (data) => {
-
-
   var redCount = 0;
   var countGreen =0;
-  var countYeallow=0;
+  var countYellow=0;
 
   {data.map((usercolordata, index) => {
   console.log(usercolordata.color);
@@ -165,15 +131,15 @@ const countColors = (data) => {
     if (usercolordata.color === "green") {
       countGreen ++;
     }
-    if (usercolordata.color === "yeallow") {
-      countYeallow ++; 
+    if (usercolordata.color === "yellow") {
+      countYellow ++; 
        }
 
   })}
     const newarray = {
       red:redCount,
       green:countGreen,
-      yeallow:countYeallow
+      yellow:countYellow
     }
     const newuserdatas = [newarray];
 
@@ -182,17 +148,25 @@ const countColors = (data) => {
 
  setAllcolorlist(newuserdatas);
 
-  
 }
 
 
  const deleteusercolor = (event,userdata) => {
-  const oldarray = [...usercolor];
+ const oldarray = [...usercolor];
  const index = usercolor.findIndex((usercolor=> usercolor.id === userdata));
   console.log(userdata);
   oldarray.splice(index,1);
   setUsercolor(oldarray);
   countColors(oldarray);
+
+  setEditing(false);
+  const clear = { 
+    id:'',
+    username:'',
+    color:'color'
+  }
+
+  setfromdata(clear);
   
  }
   return (
@@ -200,6 +174,7 @@ const countColors = (data) => {
       <div className='from'>
         <form onSubmit={handalsubmitfrom}> 
           <div className='container'>
+            <ht></ht>
              {editing ? (
                   <Fragment>
                      <div className='input-form'>
@@ -210,7 +185,7 @@ const countColors = (data) => {
                           <option value='color'>Select Color</option>
                           <option value='red'>Red</option>
                           <option value='green'>Green</option>
-                          <option value='yeallow'>Yeallo</option>
+                          <option value='yellow'>Yellow</option>
                         </select>  
                       </div>
 
@@ -231,7 +206,7 @@ const countColors = (data) => {
                           <option value='color'>Select Color</option>
                           <option value='red'>Red</option>
                           <option value='green'>Green</option>
-                          <option value='yeallow'>Yeallo</option>
+                          <option value='yellow'>Yellow</option>
                         </select>  
                       </div>
 
@@ -264,15 +239,12 @@ const countColors = (data) => {
           </tr>
 
       ))}
-  
-
   </table>
-
   {colorCount.map((colordata) => (
       <div>
         <div>Red Color <label>{colordata.red}</label></div>
         <div>Green Color <label>{colordata.green}</label></div>
-        <div>yeallow Color <label>{colordata.yeallow}</label></div>
+        <div>Yellow Color <label>{colordata.yellow}</label></div>
 
         </div>
         
